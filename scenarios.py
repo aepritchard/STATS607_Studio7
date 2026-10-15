@@ -94,26 +94,12 @@ def make_scenarios():
         "rho": 0,
         "error_distribution": "normal",
     },
-    "est_vs_pred_rho_0_l": {
-        "experiment": "B",
-        "n": 200,
-        "p": 100,
-        "rho": 0,
-        "error_distribution": "laplace",
-    },
     "est_vs_pred_rho_20_n": {
         "experiment": "B",
         "n": 200,
         "p": 100,
         "rho": 0.2,
         "error_distribution": "normal",
-    },
-    "est_vs_pred_rho_20_l": {
-        "experiment": "B",
-        "n": 200,
-        "p": 100,
-        "rho": 0.2,
-        "error_distribution": "laplace",
     },
     "est_vs_pred_rho_60_n": {
         "experiment": "B",
@@ -122,26 +108,12 @@ def make_scenarios():
         "rho": 0.6,
         "error_distribution": "normal",
     },
-    "est_vs_pred_rho_60_l": {
-        "experiment": "B",
-        "n": 200,
-        "p": 100,
-        "rho": 0.6,
-        "error_distribution": "laplace",
-    },
     "est_vs_pred_rho_90_n": {
         "experiment": "B",
         "n": 200,
         "p": 100,
         "rho": 0.9,
         "error_distribution": "normal",
-    },
-    "est_vs_pred_rho_90_l": {
-        "experiment": "B",
-        "n": 200,
-        "p": 100,
-        "rho": 0.9,
-        "error_distribution": "laplace",
     },
     }
     return experiments
