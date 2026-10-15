@@ -14,7 +14,6 @@ def make_scenarios():
     Choose the values yourselves; the handout grid is only an example.
     """
     # BEGIN TASK GRID
-    raise NotImplementedError('Choose and construct your scenario dictionary.')
     # END TASK GRID
     experiments = {
     "compare_est_normal_err_p_1_n": {
