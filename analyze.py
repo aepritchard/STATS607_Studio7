@@ -24,9 +24,53 @@ def summarize(runs):
     MCSE is the sample SD divided by sqrt(the number of nonmissing losses).
     Report failures: n_total - n_ok. Do not average over scenarios.
     """
-    # BEGIN TASK SUMMARY
-    raise NotImplementedError('Aggregate your raw results and compute Monte Carlo standard errors.')
-    # END TASK SUMMARY
+     # Work on a copy so the caller's data frame is not modified
+    runs = runs.copy()
+
+    # Get key to loop over
+    key_cols = ['study_id', 'scenario_id', 'experiment',
+                'n', 'p', 'gamma', 'rho', 'error_distribution', 'method']
+    runs['run_key'] = runs[key_cols].astype(str).agg('_'.join, axis=1)
+
+    summary_rows = []
+
+    for run_key in np.unique(runs['run_key']):
+        # Get data for specific run_key
+        run_key_data = runs.loc[runs['run_key'] == run_key]
+        run_key_data_successful = run_key_data.loc[run_key_data['status'] == 'ok']
+        run_key_data_successful = run_key_data_successful.dropna(
+            subset=['coefficient_error', 'prediction_error'])
+
+        # Per-run squared losses from successful fits, dropping missing values
+        coefficient_losses = (run_key_data_successful['coefficient_error'] ** 2)
+        prediction_losses = (run_key_data_successful['prediction_error'] ** 2)
+
+        # Get total sizes
+        n_total = run_key_data.shape[0]
+        n_ok = run_key_data_successful.shape[0]
+
+        # Get MSE
+        coefficient_MSE = np.mean(coefficient_losses)
+        prediction_MSE = np.mean(prediction_losses)
+
+        # Get MCSE
+        coefficient_MCSE = coefficient_losses.std(ddof=1) / np.sqrt(n_ok)
+        prediction_MCSE = prediction_losses.std(ddof=1) / np.sqrt(n_ok)
+
+        # Identifying values are constant within a run_key, so take the first row
+        new_row = run_key_data[key_cols].iloc[0].to_dict()
+        new_row['n_total'] = n_total
+        new_row['n_ok'] = n_ok
+        new_row['n_failed'] = n_total - n_ok
+        new_row['coefficient_mse'] = coefficient_MSE
+        new_row['prediction_mse'] = prediction_MSE
+        new_row['coefficient_mcse'] = coefficient_MCSE
+        new_row['prediction_mcse'] = prediction_MCSE
+
+        summary_rows.append(new_row)
+
+    summary = pd.DataFrame(summary_rows)
+    return summary
 
 
 def figure_a(runs):
