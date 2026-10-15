@@ -143,4 +143,5 @@ def make_scenarios():
         "rho": 0.9,
         "error_distribution": "laplace",
     },
-}
+    }
+    return experiments
